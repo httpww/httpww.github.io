@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-site-verification" content="xBT4GhYoi5qRD5tr338pgPM5OWHHIDR6mNg1a3euekI">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content>
+    <meta name="keyword" content>
+    <link rel="shortcut icon" href="/img/favicon.ico">
+
+    <title>
+        
+        漫步数据结构1：线段树1 - undefined
+        
+    </title>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/aircloud.css">
+    <link rel="stylesheet" href="/css/gitment.css">
+    <!--<link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">-->
+    <link href="//at.alicdn.com/t/font_620856_pl6z7sid89qkt9.css" rel="stylesheet" type="text/css">
+    <!-- ga & ba script hoook -->
+    <script></script>
+</head>
+
+<body>
+
+<div class="site-nav-toggle" id="site-nav-toggle">
+    <button>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+        <span class="btn-bar"></span>
+    </button>
+</div>
+
+<div class="index-about">
+    <i> by baoshijie </i>
+</div>
+
+<div class="index-container">
+    
+    <div class="index-left">
+        
+<div class="nav" id="nav">
+    <div class="avatar-name">
+        <div class="avatar">
+            <img src="/img/timg.jpg">
+        </div>
+        <div class="name">
+            <i>TheT</i>
+        </div>
+    </div>
+    <div class="contents" id="nav-content">
+        <ul>
+            <li>
+                <a href="/">
+                    <i class="iconfont icon-shouye1"></i>
+                    <span>HOME</span>
+                </a>
+            </li>
+            <li>
+                <a href="/tags">
+                    <i class="iconfont icon-biaoqian1"></i>
+                    <span>TAGS</span>
+                </a>
+            </li>
+            <li>
+                <a href="/archives">
+                    <i class="iconfont icon-guidang2"></i>
+                    <span>ARCHIVES</span>
+                </a>
+            </li>
+            <li>
+                <a href="/about/">
+                    <i class="iconfont icon-guanyu2"></i>
+                    <span>ABOUT</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+    
+        <div id="toc" class="toc-article">
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-区间线段树"><span class="toc-text">1. 区间线段树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-0-建树"><span class="toc-text">1.0 建树</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-单点修改，区间查询"><span class="toc-text">1.1 单点修改，区间查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-区间修改，单点查询"><span class="toc-text">1.2 区间修改，单点查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-区间修改，区间查询"><span class="toc-text">1.3 区间修改，区间查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-1-3"><span class="toc-text">1.4 1.3++</span></a></li></ol></li></ol>
+</div>
+    
+</div>
+
+
+<div class="search-field" id="search-field">
+    <div class="search-container">
+        <div class="search-input">
+            <span id="esc-search"> <i class="icon-fanhui iconfont"></i></span>
+            <input id="search-input">
+            <span id="begin-search">search</span>
+        </div>
+        <div class="search-result-container" id="search-result-container">
+
+        </div>
+    </div>
+</div>
+        <div class="index-about-mobile">
+            <i> by baoshijie </i>
+        </div>
+    </div>
+    
+    <div class="index-middle">
+        <!-- Main Content -->
+        
+
+
+<div class="post-container">
+    <div class="post-title">
+        漫步数据结构1：线段树1
+    </div>
+
+    <div class="post-meta">
+        <span class="attr">Post：<span>2019-03-23 15:33:00</span></span>
+        
+        
+        <span class="attr">Visit：<span id="busuanzi_value_page_pv"></span>
+</span>
+
+    </div>
+    <div class="post-content ">
+        <blockquote>
+<p>线段树是一种二叉搜索树，与区间树相似，它将一个区间划分成一些单元区间，每个单元区间对应线段树中的一个叶结点。 By 百度百科</p>
+<p>线段树一般分成两种：区间线段树和权值线段树 By 某大佬学长</p>
+</blockquote>
+<h2 id="1-区间线段树"><a href="#1-区间线段树" class="headerlink" title="1. 区间线段树"></a>1. 区间线段树</h2><p>区间线段树是一棵均衡二叉树，每个节点要么是叶子节点，要么有两个儿子,叶子节点维护元素信息，其他节点维护区间信息。一般情况下，线段树用堆式存储，除非…算了，不剧透了。先画个图：<br><img src="https://cdn.luogu.org/upload/pic/53894.png" alt><br>图中我们发现，如果一个线段树非叶子节点表示$[l,r]$，定义$mid=\left\lfloor\frac{l+r}{2}\right\rfloor$，那么它的左儿子表示的区间是$[l,mid]$，右儿子表示的区间是$[mid+1,r]$。</p>
+<p>接下来要开始讲具体操作了，我们以维护区间和为例，但在代码中会维护区间和、区间$max$和区间$min$。</p>
+<h3 id="1-0-建树"><a href="#1-0-建树" class="headerlink" title="1.0 建树"></a>1.0 建树</h3><p>自上向下遍历到每个点，在自下向上维护信息，每个点都只被访问一次，所以是$O(n)$的。</p>
+<h3 id="1-1-单点修改，区间查询"><a href="#1-1-单点修改，区间查询" class="headerlink" title="1.1 单点修改，区间查询"></a>1.1 单点修改，区间查询</h3><p>单点修改应该是最简单的操作了，只要自上往下找到目标点，然后自下往上修改区间信息就可以了，复杂度自然就和树高同级，是$O(nlgn)$。举个修改4号节点的例子：<br><img src="https://cdn.luogu.org/upload/pic/53896.png" alt><br>查询的时候只需要分治，如果要查询的区间完全覆盖了当前节点所表示的区间时，直接返回</p>
+<h3 id="1-2-区间修改，单点查询"><a href="#1-2-区间修改，单点查询" class="headerlink" title="1.2 区间修改，单点查询"></a>1.2 区间修改，单点查询</h3><p>现在我们需要引入$lazy_tag$的概念，$lazy_tag_x$表示$x$号节点表示的区间需要加$lazy_tag_x$，且$x$号节点还未进行过这次修改。<br>举个例子：<br><img src="https://cdn.luogu.org/upload/pic/54481.png" alt></p>
+<h3 id="1-3-区间修改，区间查询"><a href="#1-3-区间修改，区间查询" class="headerlink" title="1.3 区间修改，区间查询"></a>1.3 区间修改，区间查询</h3><p>其实只需要把<code>1.1</code>的查询操作和<code>1.2</code>的修改操作合起来就好了。<br>我猜已经可以直接上代码了，题意详见<a href="https://www.luogu.org/problemnew/show/P3372" target="_blank" rel="noopener">P3372</a>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> min(x,y) ((x&lt;y)?x:y)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> max(x,y) ((x&gt;y)?x:y)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> rc ((p&lt;&lt;1)|1)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> lc (p&lt;&lt;1)</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> mid ((l+r)&gt;&gt;1)</span></span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> n,m,a[<span class="number">100005</span>],sum[<span class="number">400005</span>],minn[<span class="number">400005</span>],maxx[<span class="number">400005</span>],addtag[<span class="number">400005</span>],multag[<span class="number">400005</span>];</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">down</span><span class="params">(<span class="keyword">long</span> <span class="keyword">long</span> p,<span class="keyword">long</span> <span class="keyword">long</span> l,<span class="keyword">long</span> <span class="keyword">long</span> r)</span></span>&#123;</span><br><span class="line">  sum[p]+=addtag[p]*(r-l+<span class="number">1</span>);</span><br><span class="line">  minn[p]+=addtag[p];</span><br><span class="line">  maxx[p]+=addtag[p];</span><br><span class="line">  <span class="keyword">if</span>(r&gt;l)&#123;</span><br><span class="line">    addtag[lc]+=addtag[p];</span><br><span class="line">    addtag[rc]+=addtag[p];</span><br><span class="line">  &#125;</span><br><span class="line">  addtag[p]=<span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">up</span><span class="params">(<span class="keyword">long</span> <span class="keyword">long</span> p,<span class="keyword">long</span> <span class="keyword">long</span> l,<span class="keyword">long</span> <span class="keyword">long</span> r)</span></span>&#123;</span><br><span class="line">  down(lc,l,mid);</span><br><span class="line">  down(rc,mid+<span class="number">1</span>,r);</span><br><span class="line">  sum[p]=sum[lc]+sum[rc];</span><br><span class="line">  minn[p]=min(minn[lc],minn[rc]);</span><br><span class="line">  maxx[p]=max(maxx[lc],maxx[rc]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">build</span><span class="params">(<span class="keyword">long</span> <span class="keyword">long</span> p,<span class="keyword">long</span> <span class="keyword">long</span> l,<span class="keyword">long</span> <span class="keyword">long</span> r)</span></span>&#123;</span><br><span class="line">  addtag[p]=<span class="number">0</span>;</span><br><span class="line">  multag[p]=<span class="number">1</span>;</span><br><span class="line">  <span class="keyword">if</span>(l==r)&#123;</span><br><span class="line">    sum[p]=a[l];</span><br><span class="line">    minn[p]=a[l];</span><br><span class="line">    maxx[p]=a[l];</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  build(lc,l,mid);</span><br><span class="line">  build(rc,mid+<span class="number">1</span>,r);</span><br><span class="line">  up(p,l,r);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">long</span> <span class="keyword">long</span> <span class="title">find_sum</span><span class="params">(<span class="keyword">long</span> <span class="keyword">long</span> p,<span class="keyword">long</span> <span class="keyword">long</span> l,<span class="keyword">long</span> <span class="keyword">long</span> r,<span class="keyword">long</span> <span class="keyword">long</span> x,<span class="keyword">long</span> <span class="keyword">long</span> y)</span></span>&#123;</span><br><span class="line">  down(p,l,r);</span><br><span class="line">  <span class="keyword">if</span>(l==x&amp;&amp;r==y)</span><br><span class="line">    <span class="keyword">return</span> sum[p];</span><br><span class="line">  <span class="keyword">if</span>(y&lt;=mid)</span><br><span class="line">    <span class="keyword">return</span> find_sum(lc,l,mid,x,y);</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span>(x&gt;mid)</span><br><span class="line">    <span class="keyword">return</span> find_sum(rc,mid+<span class="number">1</span>,r,x,y);</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">return</span> find_sum(lc,l,mid,x,mid)+find_sum(rc,mid+<span class="number">1</span>,r,mid+<span class="number">1</span>,y);</span><br><span class="line">  up(p,l,r);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">rangeadd</span><span class="params">(<span class="keyword">long</span> <span class="keyword">long</span> p,<span class="keyword">long</span> <span class="keyword">long</span> l,<span class="keyword">long</span> <span class="keyword">long</span> r,<span class="keyword">long</span> <span class="keyword">long</span> x,<span class="keyword">long</span> <span class="keyword">long</span> y,<span class="keyword">long</span> <span class="keyword">long</span> d)</span></span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(l==x&amp;&amp;r==y)&#123;</span><br><span class="line">    addtag[p]+=d;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  sum[p]+=d*(y-x+<span class="number">1</span>);</span><br><span class="line">  minn[p]+=d;</span><br><span class="line">  maxx[p]+=d;</span><br><span class="line">  <span class="keyword">if</span>(y&lt;=mid)</span><br><span class="line">    rangeadd(lc,l,mid,x,y,d);</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span>(x&gt;mid)</span><br><span class="line">    rangeadd(rc,mid+<span class="number">1</span>,r,x,y,d);</span><br><span class="line">  <span class="keyword">else</span>&#123;</span><br><span class="line">    rangeadd(lc,l,mid,x,mid,d);</span><br><span class="line">    rangeadd(rc,mid+<span class="number">1</span>,r,mid+<span class="number">1</span>,y,d);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">  <span class="built_in">scanf</span>(<span class="string">"%lld%lld"</span>,&amp;n,&amp;m);</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">long</span> <span class="keyword">long</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%lld"</span>,a+i);</span><br><span class="line">  build(<span class="number">1</span>,<span class="number">1</span>,n);</span><br><span class="line">  <span class="keyword">while</span>(m--)&#123;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> op,x,y;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%lld%lld%lld"</span>,&amp;op,&amp;x,&amp;y);</span><br><span class="line">    <span class="keyword">if</span>(op==<span class="number">2</span>)</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"%lld\n"</span>,find_sum(<span class="number">1</span>,<span class="number">1</span>,n,x,y));</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">      <span class="keyword">long</span> <span class="keyword">long</span> d;</span><br><span class="line">      <span class="built_in">scanf</span>(<span class="string">"%lld"</span>,&amp;d);</span><br><span class="line">      rangeadd(<span class="number">1</span>,<span class="number">1</span>,n,x,y,d);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="1-4-1-3"><a href="#1-4-1-3" class="headerlink" title="1.4 1.3++"></a>1.4 1.3++</h3><p>聪明的读者一定已经想到线段树理应支持<a href="https://www.luogu.org/problemnew/show/P3373" target="_blank" rel="noopener">P3373</a>的操作——区间乘法。其实这很简单，只要分别记录乘法$lazy_tag$和加法$lazy_tag$即可，我猜已经可以直接上代码了（由于常数限制，只维护区间和）：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="keyword">int</span> n,m,MOD,a[<span class="number">400005</span>],sum[<span class="number">1600005</span>],addtag[<span class="number">1600005</span>],multag[<span class="number">1600005</span>];</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">down</span><span class="params">(<span class="keyword">int</span> p,<span class="keyword">int</span> l,<span class="keyword">int</span> r)</span></span>&#123;</span><br><span class="line">  sum[p]=((<span class="keyword">long</span> <span class="keyword">long</span>)sum[p]*multag[p]+(<span class="keyword">long</span> <span class="keyword">long</span>)addtag[p]*(r-l+<span class="number">1</span>))%MOD;</span><br><span class="line">  <span class="keyword">if</span>(l&lt;r)&#123;</span><br><span class="line">    addtag[(p&lt;&lt;<span class="number">1</span>)]=((<span class="keyword">long</span> <span class="keyword">long</span>)addtag[(p&lt;&lt;<span class="number">1</span>)]*multag[p]+addtag[p])%MOD;</span><br><span class="line">    addtag[((p&lt;&lt;<span class="number">1</span>)|<span class="number">1</span>)]=((<span class="keyword">long</span> <span class="keyword">long</span>)addtag[((p&lt;&lt;<span class="number">1</span>)|<span class="number">1</span>)]*multag[p]+addtag[p])%MOD;</span><br><span class="line">    multag[(p&lt;&lt;<span class="number">1</span>)]=(<span class="keyword">long</span> <span class="keyword">long</span>)multag[(p&lt;&lt;<span class="number">1</span>)]*multag[p]%MOD;</span><br><span class="line">    multag[((p&lt;&lt;<span class="number">1</span>)|<span class="number">1</span>)]=(<span class="keyword">long</span> <span class="keyword">long</span>)multag[((p&lt;&lt;<span class="number">1</span>)|<span class="number">1</span>)]*multag[p]%MOD;</span><br><span class="line">  &#125;</span><br><span class="line">  addtag[p]=<span class="number">0</span>;</span><br><span class="line">  multag[p]=<span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">inline</span> <span class="keyword">void</span> <span class="title">up</span><span class="params">(<span class="keyword">int</span> p,<span class="keyword">int</span> l,<span class="keyword">int</span> r)</span></span>&#123;</span><br><span class="line">  down((p&lt;&lt;<span class="number">1</span>),l,((l+r)&gt;&gt;<span class="number">1</span>));</span><br><span class="line">  down(((p&lt;&lt;<span class="number">1</span>)|<span class="number">1</span>),((l+r)&gt;&gt;<span class="number">1</span>)+<span class="number">1</span>,r);</span><br><span class="line">  <span class="keyword">if</span>(l&lt;r)&#123;</span><br><span class="line">    sum[p]=(sum[(p&lt;&lt;<span class="number">1</span>)]+sum[((p&lt;&lt;<span class="number">1</span>)|<span class="number">1</span>)])%MOD;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">build</span><span class="params">(<span class="keyword">int</span> p,<span class="keyword">int</span> l,<span class="keyword">int</span> r)</span></span>&#123;</span><br><span class="line">  addtag[p]=<span class="number">0</span>;</span><br><span class="line">  multag[p]=<span class="number">1</span>;</span><br><span class="line">  <span class="keyword">if</span>(l==r)&#123;</span><br><span class="line">    sum[p]=a[l];</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  build((p&lt;&lt;<span class="number">1</span>),l,((l+r)&gt;&gt;<span class="number">1</span>));</span><br><span class="line">  build(((p&lt;&lt;<span class="number">1</span>)|<span class="number">1</span>),((l+r)&gt;&gt;<span class="number">1</span>)+<span class="number">1</span>,r);</span><br><span class="line">  up(p,l,r);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">find_sum</span><span class="params">(<span class="keyword">int</span> p,<span class="keyword">int</span> l,<span class="keyword">int</span> r,<span class="keyword">int</span> x,<span class="keyword">int</span> y)</span></span>&#123;</span><br><span class="line">  down(p,l,r);</span><br><span class="line">  up(p,l,r);</span><br><span class="line">  <span class="keyword">if</span>(l==x&amp;&amp;r==y)</span><br><span class="line">    <span class="keyword">return</span> sum[p];</span><br><span class="line">  <span class="keyword">if</span>(y&lt;=((l+r)&gt;&gt;<span class="number">1</span>))</span><br><span class="line">    <span class="keyword">return</span> find_sum((p&lt;&lt;<span class="number">1</span>),l,((l+r)&gt;&gt;<span class="number">1</span>),x,y);</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span>(x&gt;((l+r)&gt;&gt;<span class="number">1</span>))</span><br><span class="line">    <span class="keyword">return</span> find_sum(((p&lt;&lt;<span class="number">1</span>)|<span class="number">1</span>),((l+r)&gt;&gt;<span class="number">1</span>)+<span class="number">1</span>,r,x,y);</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">return</span> find_sum((p&lt;&lt;<span class="number">1</span>),l,((l+r)&gt;&gt;<span class="number">1</span>),x,((l+r)&gt;&gt;<span class="number">1</span>))+find_sum(((p&lt;&lt;<span class="number">1</span>)|<span class="number">1</span>),((l+r)&gt;&gt;<span class="number">1</span>)+<span class="number">1</span>,r,((l+r)&gt;&gt;<span class="number">1</span>)+<span class="number">1</span>,y);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">rangeadd</span><span class="params">(<span class="keyword">int</span> p,<span class="keyword">int</span> l,<span class="keyword">int</span> r,<span class="keyword">int</span> x,<span class="keyword">int</span> y,<span class="keyword">int</span> d)</span></span>&#123;</span><br><span class="line">  down(p,l,r);</span><br><span class="line">  up(p,l,r);</span><br><span class="line">  <span class="keyword">if</span>(l==x&amp;&amp;r==y)&#123;</span><br><span class="line">    addtag[p]+=d;</span><br><span class="line">    down(p,l,r);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span>(y&lt;=((l+r)&gt;&gt;<span class="number">1</span>))</span><br><span class="line">    rangeadd((p&lt;&lt;<span class="number">1</span>),l,((l+r)&gt;&gt;<span class="number">1</span>),x,y,d);</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span>(x&gt;((l+r)&gt;&gt;<span class="number">1</span>))</span><br><span class="line">    rangeadd(((p&lt;&lt;<span class="number">1</span>)|<span class="number">1</span>),((l+r)&gt;&gt;<span class="number">1</span>)+<span class="number">1</span>,r,x,y,d);</span><br><span class="line">  <span class="keyword">else</span>&#123;</span><br><span class="line">    rangeadd((p&lt;&lt;<span class="number">1</span>),l,((l+r)&gt;&gt;<span class="number">1</span>),x,((l+r)&gt;&gt;<span class="number">1</span>),d);</span><br><span class="line">    rangeadd(((p&lt;&lt;<span class="number">1</span>)|<span class="number">1</span>),((l+r)&gt;&gt;<span class="number">1</span>)+<span class="number">1</span>,r,((l+r)&gt;&gt;<span class="number">1</span>)+<span class="number">1</span>,y,d);</span><br><span class="line">  &#125;</span><br><span class="line">  up(p,l,r);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">rangemul</span><span class="params">(<span class="keyword">int</span> p,<span class="keyword">int</span> l,<span class="keyword">int</span> r,<span class="keyword">int</span> x,<span class="keyword">int</span> y,<span class="keyword">int</span> d)</span></span>&#123;</span><br><span class="line">  down(p,l,r);</span><br><span class="line">  up(p,l,r);</span><br><span class="line">  <span class="keyword">if</span>(l==x&amp;&amp;r==y)&#123;</span><br><span class="line">    multag[p]=(<span class="keyword">long</span> <span class="keyword">long</span>)multag[p]*d;</span><br><span class="line">    addtag[p]=(<span class="keyword">long</span> <span class="keyword">long</span>)addtag[p]*d;</span><br><span class="line">    down(p,l,r);</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span>(y&lt;=((l+r)&gt;&gt;<span class="number">1</span>))</span><br><span class="line">    rangemul((p&lt;&lt;<span class="number">1</span>),l,((l+r)&gt;&gt;<span class="number">1</span>),x,y,d);</span><br><span class="line">  <span class="keyword">else</span> <span class="keyword">if</span>(x&gt;((l+r)&gt;&gt;<span class="number">1</span>))</span><br><span class="line">    rangemul(((p&lt;&lt;<span class="number">1</span>)|<span class="number">1</span>),((l+r)&gt;&gt;<span class="number">1</span>)+<span class="number">1</span>,r,x,y,d);</span><br><span class="line">  <span class="keyword">else</span>&#123;</span><br><span class="line">    rangemul((p&lt;&lt;<span class="number">1</span>),l,((l+r)&gt;&gt;<span class="number">1</span>),x,((l+r)&gt;&gt;<span class="number">1</span>),d);</span><br><span class="line">    rangemul(((p&lt;&lt;<span class="number">1</span>)|<span class="number">1</span>),((l+r)&gt;&gt;<span class="number">1</span>)+<span class="number">1</span>,r,((l+r)&gt;&gt;<span class="number">1</span>)+<span class="number">1</span>,y,d);</span><br><span class="line">  &#125;</span><br><span class="line">  up(p,l,r);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">  <span class="built_in">scanf</span>(<span class="string">"%d%d%d"</span>,&amp;n,&amp;m,&amp;MOD);</span><br><span class="line">  <span class="keyword">for</span>(<span class="keyword">register</span> <span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d"</span>,a+i);</span><br><span class="line">  build(<span class="number">1</span>,<span class="number">1</span>,n);</span><br><span class="line">  <span class="keyword">while</span>(m--)&#123;</span><br><span class="line">    <span class="keyword">int</span> op,x,y;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d%d%d"</span>,&amp;op,&amp;x,&amp;y);</span><br><span class="line">    <span class="keyword">if</span>(op==<span class="number">3</span>)</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">"%d\n"</span>,find_sum(<span class="number">1</span>,<span class="number">1</span>,n,x,y)%MOD);</span><br><span class="line">    <span class="keyword">else</span>&#123;</span><br><span class="line">      <span class="keyword">int</span> d;</span><br><span class="line">      <span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;d);</span><br><span class="line">      <span class="keyword">if</span>(op==<span class="number">2</span>)</span><br><span class="line">        rangeadd(<span class="number">1</span>,<span class="number">1</span>,n,x,y,d);</span><br><span class="line">      <span class="keyword">else</span> rangemul(<span class="number">1</span>,<span class="number">1</span>,n,x,y,d);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+        
+        <br>
+        <div id="comment-container">
+        </div>
+        <div id="disqus_thread"></div>
+
+        <div id="lv-container">
+        </div>
+
+    </div>
+</div>
+
+    </div>
+</div>
+
+
+<footer class="footer">
+    <ul class="list-inline text-center">
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+    </ul>
+    
+    <p>
+        <span id="busuanzi_container_site_pv">
+            <span id="busuanzi_value_site_pv"></span>PV
+        </span>
+        <span id="busuanzi_container_site_uv">
+            <span id="busuanzi_value_site_uv"></span>UV
+        </span>
+        Created By <a href="https://hexo.io/">Hexo</a>  Theme <a href="https://github.com/aircloud/hexo-theme-aircloud">AirCloud</a></p>
+</footer>
+
+
+
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+<!--script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+
+<script>
+    // We expose some of the variables needed by the front end
+    window.hexo_search_path = ""
+    window.hexo_root = "/"
+    window.isPost = true
+</script>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="/js/index.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+</html>
